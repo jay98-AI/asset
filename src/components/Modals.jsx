@@ -20,12 +20,12 @@ export function AddVersionModal({ asset, file, onFile, onUpload, onClose }) {
       <div className="modal version-modal" role="dialog" aria-modal="true" aria-labelledby="version-title" onMouseDown={(event) => event.stopPropagation()}>
         <div className="modal-kicker">New version</div>
         <h2 id="version-title">{asset.name}</h2>
-        <p>This will become V{asset.ver + 1}. Older versions remain available.</p>
-        <button className={`drop-zone small ${file ? 'has-file' : ''}`} onClick={onFile}>
+        <p>Drop a file here or click to browse. This will become V{asset.ver + 1}.</p>
+        <button className={`drop-zone small ${file ? 'has-file' : ''}`} onClick={onFile} aria-label="Choose a file">
           <span className="upload-icon" aria-hidden="true">
             {file ? <svg viewBox="0 0 16 16" focusable="false"><path d="m3.5 8 3 3 6-6" /></svg> : <svg viewBox="0 0 16 16" focusable="false"><path d="M8 12V3m0 0L4.5 6.5M8 3l3.5 3.5M3 13h10" /></svg>}
           </span>
-          <strong>{file || 'Choose a file'}</strong>
+          <strong>{file || 'Drop file here or click to browse'}</strong>
           <small>{file ? 'Ready to upload' : 'Click to simulate file selection'}</small>
         </button>
         <div className="modal-actions"><button className="secondary-button" onClick={onClose}>Cancel</button>{file && <button className="primary-button" onClick={onUpload}>Upload V{asset.ver + 1}</button>}</div>

@@ -8,7 +8,7 @@ export default function AdminView({ form, projects, types, assets, onField, onPu
       <section className="admin-intro">
         <div>
           <div className="eyebrow">Admin workspace</div>
-          <h1>Upload and manage</h1>
+          <h1 aria-label="Upload and manage">Upload approved asset</h1>
           <p>Publish approved assets, add metadata, and maintain version history.</p>
         </div>
         <div className="admin-count"><strong>{assets.length}</strong><span>active assets</span></div>
@@ -19,8 +19,8 @@ export default function AdminView({ form, projects, types, assets, onField, onPu
           <div className="section-heading"><div><span>01</span><h2>Upload asset</h2></div><small>Fields marked * are required</small></div>
           <div className="drop-zone is-pending">
             <span className="upload-icon" aria-hidden="true">↑</span>
-            <strong>File upload is not connected yet</strong>
-            <small>Publish the metadata below · files arrive with the asset API</small>
+            <strong>Drop file here or browse</strong>
+            <small>Choose the file before publishing its metadata</small>
           </div>
 
           <div className="form-grid">

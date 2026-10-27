@@ -25,23 +25,14 @@ const EMPTY_FORM = {
 const EMPTY_FACETS = { projects: [], episodes: [], scenes: [] }
 
 function preferredTheme() {
-  if (typeof window === 'undefined') return 'dark'
+  if (typeof window === 'undefined') return 'light'
   try {
     const saved = window.localStorage.getItem('asset-hub-theme')
     if (saved === 'light' || saved === 'dark') return saved
   } catch {
     // Theme preference remains temporary if the browser blocks storage.
   }
-  return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-}
-
-function preferredSidebar() {
-  if (typeof window === 'undefined') return false
-  try {
-    return window.localStorage.getItem('asset-hub-sidebar') === 'collapsed'
-  } catch {
-    return false
-  }
+  return 'light'
 }
 
 export default function App() {
@@ -70,7 +61,7 @@ export default function App() {
   const [versionFile, setVersionFile] = useState('')
   const [toast, setToast] = useState('')
   const [theme, setTheme] = useState(preferredTheme)
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(preferredSidebar)
+  const [viewMode, setViewMode] = useState('grid')
   const toastTimer = useRef(null)
   const nextAssetId = useRef(Math.max(0, ...INITIAL_ASSETS.map((asset) => asset.id)) + 1)
 
@@ -84,14 +75,6 @@ export default function App() {
       // The selected theme still applies for this visit.
     }
   }, [theme])
-
-  useEffect(() => {
-    try {
-      window.localStorage.setItem('asset-hub-sidebar', sidebarCollapsed ? 'collapsed' : 'expanded')
-    } catch {
-      // The current layout still changes if browser storage is unavailable.
-    }
-  }, [sidebarCollapsed])
 
   const detailAsset = assets.find((asset) => asset.id === detailId) ?? assets[0]
   const parsedSearch = useMemo(() => parseSearch(query), [query])
@@ -253,14 +236,12 @@ export default function App() {
   }
 
   return (
-    <div className={sidebarCollapsed ? 'app sidebar-collapsed' : 'app'}>
+    <div className="app">
       <Header
         view={view}
         isAdmin={isAdmin}
         theme={theme}
-        sidebarCollapsed={sidebarCollapsed}
         onThemeToggle={() => setTheme((current) => current === 'dark' ? 'light' : 'dark')}
-        onSidebarToggle={() => setSidebarCollapsed((current) => !current)}
         onNavigate={navigate}
         onMember={returnToMember}
         onAdmin={handleAdmin}
@@ -288,6 +269,8 @@ export default function App() {
           onType={setType}
           onClearSelection={() => setSelected([])}
           onDownloadSelection={() => { notify(`Preparing ${selected.length} assets as assets.zip`); setSelected([]) }}
+          viewMode={viewMode}
+          onViewMode={setViewMode}
         />
       )}
 

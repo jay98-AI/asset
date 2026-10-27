@@ -1,5 +1,6 @@
 import AssetCard from './AssetCard.jsx'
 import { FilterDropdown, TypeFilters } from './Filters.jsx'
+import { sceneLabel } from '../lib/assets.js'
 
 export default function SearchView({
   query,
@@ -22,17 +23,17 @@ export default function SearchView({
   onType,
   onClearSelection,
   onDownloadSelection,
+  viewMode,
+  onViewMode,
 }) {
   const hasFilters = Object.values(filters).some((values) => values.length) || type !== 'All'
 
   return (
     <main className="page-shell search-view">
       <section className="search-hero">
-        <div className="eyebrow">Asset search</div>
-        <h1>Find the right asset, fast.</h1>
-        <p>Search by name, character, location, episode, scene, or prop.</p>
+        <div className="eyebrow">Search assets</div>
+        <h1 className="sr-only">Find the right asset, fast.</h1>
         <label className="search-box">
-          <span aria-hidden="true">⌕</span>
           <input
             value={query}
             onChange={(event) => onQuery(event.target.value)}
@@ -78,6 +79,10 @@ export default function SearchView({
             onClear={() => onClearFilter('scenes')}
           />
           {hasFilters && <button className="text-button" onClick={onClearAll}>Clear all</button>}
+          <div className="view-toggle" aria-label="Asset layout">
+            <button className={viewMode === 'grid' ? 'is-active' : ''} onClick={() => onViewMode('grid')} aria-pressed={viewMode === 'grid'}>Grid</button>
+            <button className={viewMode === 'list' ? 'is-active' : ''} onClick={() => onViewMode('list')} aria-pressed={viewMode === 'list'}>List</button>
+          </div>
         </div>
         <TypeFilters types={types} current={type} onChange={onType} />
       </section>
@@ -85,22 +90,37 @@ export default function SearchView({
       <div className="result-heading">
         <div>
           <strong>{assets.length} {assets.length === 1 ? 'asset' : 'assets'}</strong>
-          <span> sorted by most relevant</span>
         </div>
       </div>
 
       {assets.length ? (
-        <section className="asset-grid" aria-live="polite">
-          {assets.map((asset) => (
-            <AssetCard
-              key={asset.id}
-              asset={asset}
-              selected={selected.includes(asset.id)}
-              onSelect={onSelect}
-              onOpen={onOpen}
-            />
-          ))}
-        </section>
+        viewMode === 'grid' ? (
+          <section className="asset-grid" aria-live="polite">
+            {assets.map((asset) => (
+              <AssetCard
+                key={asset.id}
+                asset={asset}
+                selected={selected.includes(asset.id)}
+                onSelect={onSelect}
+                onOpen={onOpen}
+              />
+            ))}
+          </section>
+        ) : (
+          <section className="asset-list" aria-live="polite">
+            {assets.map((asset) => (
+              <article className="asset-list-row" key={asset.id}>
+                <button className="select-button" onClick={() => onSelect(asset.id)} aria-pressed={selected.includes(asset.id)} aria-label={`${selected.includes(asset.id) ? 'Unselect' : 'Select'} ${asset.name}`}>
+                  {selected.includes(asset.id) ? '✓' : ''}
+                </button>
+                <button className="asset-list-name" onClick={() => onOpen(asset.id)}>{asset.name}</button>
+                <span>{asset.type}</span>
+                <span>{sceneLabel(asset)}</span>
+                <span className="num">V{asset.ver}</span>
+              </article>
+            ))}
+          </section>
+        )
       ) : (
         <div className="empty-state">
           <div>⌕</div>

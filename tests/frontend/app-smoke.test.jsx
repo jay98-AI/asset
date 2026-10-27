@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest'
 import App from '../../src/App.jsx'
 
 describe('App', () => {
-  it('renders the initial asset-library heading', () => {
+  it('renders the initial asset search screen', () => {
     render(<App />)
 
     expect(screen.getByRole('heading', { level: 1, name: 'Find the right asset, fast.' })).toBeInTheDocument()
@@ -19,10 +19,11 @@ describe('App', () => {
     expect(window.localStorage.getItem('asset-hub-theme')).toBe(document.documentElement.dataset.theme)
   })
 
-  it('collapses the sidebar and records the layout preference', () => {
+  it('switches between the grid and list layouts', () => {
     render(<App />)
-    fireEvent.click(screen.getByRole('button', { name: 'Collapse sidebar' }))
-    expect(document.querySelector('.app')).toHaveClass('sidebar-collapsed')
-    expect(window.localStorage.getItem('asset-hub-sidebar')).toBe('collapsed')
+    fireEvent.click(screen.getByRole('button', { name: 'List' }))
+    expect(document.querySelector('.asset-list')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Grid' }))
+    expect(document.querySelector('.asset-grid')).toBeInTheDocument()
   })
 })
