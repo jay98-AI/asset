@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><style>body{margin:0;background:#121214}a{color:#f2b34a}input,select,textarea{font-family:inherit}</style></helmet>
+<div style="font-family:system-ui,sans-serif;color:#e8e6e1;min-height:100vh;background:#121214;display:flex;flex-direction:column">
+<div style="display:flex;align-items:center;gap:20px;padding:0 24px;height:56px;border-bottom:1px solid #2a2a2e;background:#18181b">
+<b style="font-size:17px;letter-spacing:.02em">Asset<span style="color:#f2b34a">Hub</span></b>
+<div style="display:flex;gap:4px;flex:1">
+<button onClick="{{ goSearch }}" style="{{ navSearch }}">Search</button>
+<button onClick="{{ goBrowse }}" style="{{ navBrowse }}">Browse</button>
+<sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}"><button onClick="{{ goAdmin }}" style="{{ navAdmin }}">Upload</button></sc-if></div>
+<div style="display:flex;gap:2px;background:#26262b;border-radius:6px;padding:2px;font-size:12px"><button onClick="{{ asMember }}" style="{{ roleMember }}">Member</button><button onClick="{{ asAdmin }}" style="{{ roleAdmin }}">Admin</button></div></div>
+
+<sc-if value="{{ isSearch }}" hint-placeholder-val="{{ true }}"><div style="max-width:1100px;width:100%;margin:0 auto;padding:28px 24px;box-sizing:border-box;display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-direction:column;gap:8px"><input value="{{ q }}" onChange="{{ setQ }}" onInput="{{ setQ }}" placeholder="Try: Arjun, ep01, sc03" style="background:#1d1d21;border:1.5px solid #3a3a40;border-radius:28px;color:#fff;padding:14px 22px;font-size:16px;outline:none"/>
+<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;min-height:26px;font-size:12px"><sc-for list="{{ chips }}" as="c" hint-placeholder-count="0"><span style="background:#2b2619;border:1px solid #f2b34a;color:#f2b34a;border-radius:14px;padding:3px 10px">{{ c }}</span></sc-for><span style="color:#8a8a90">{{ hint }}</span></div></div>
+<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start"><sc-for list="{{ dds }}" as="x" hint-placeholder-count="4"><div style="position:relative"><button onClick="{{ x.toggle }}" style="{{ x.style }}">{{ x.summary }} ▾</button><sc-if value="{{ x.open }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;top:38px;left:0;z-index:20;min-width:190px;max-height:260px;overflow:auto;background:#1d1d21;border:1px solid #3a3a40;border-radius:8px;padding:6px;display:flex;flex-direction:column"><sc-for list="{{ x.opts }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.on }}" style="display:flex;gap:8px;text-align:left;background:none;border:none;color:#e8e6e1;padding:6px 8px;cursor:pointer;font-size:13px"><span style="color:#f2b34a">{{ o.mark }}</span>{{ o.label }}</button></sc-for><button onClick="{{ x.clear }}" style="background:none;border:none;border-top:1px solid #2a2a2e;color:#9a9aa0;padding:8px;cursor:pointer;font-size:12px;text-align:left;margin-top:4px">Clear</button></div></sc-if></div></sc-for><sc-if value="{{ anyFilter }}" hint-placeholder-val="{{ false }}"><button onClick="{{ clearAll }}" style="background:none;border:none;color:#f2b34a;cursor:pointer;font-size:13px;padding:8px 4px">Clear all filters</button></sc-if></div>
+<div style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ typeChips }}" as="t" hint-placeholder-count="7"><button onClick="{{ t.on }}" style="{{ t.style }}">{{ t.label }}</button></sc-for></div>
+<div style="display:flex;justify-content:space-between;font-size:13px;color:#9a9aa0"><span>{{ count }}</span><span>{{ selInfo }}</span></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px"><sc-for list="{{ results }}" as="c" hint-placeholder-count="6"><div style="{{ c.border }}"><div onClick="{{ c.open }}" style="{{ c.bg }}"><span style="font-size:11px;background:#000a;padding:2px 8px;border-radius:10px">{{ c.type }}</span></div><div style="padding:10px;display:flex;flex-direction:column;gap:4px"><div style="display:flex;justify-content:space-between;gap:6px"><b style="font-size:14px">{{ c.name }}</b><button onClick="{{ c.toggle }}" style="background:none;border:none;color:#f2b34a;font-size:16px;cursor:pointer;padding:0">{{ c.check }}</button></div><span style="font-size:12px;color:#9a9aa0">{{ c.meta }}</span></div></div></sc-for></div>
+<sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}"><div style="padding:60px;text-align:center;color:#8a8a90">No assets match. Check episode and scene numbers.</div></sc-if>
+<sc-if value="{{ hasSel }}" hint-placeholder-val="{{ false }}"><div style="position:sticky;bottom:16px;background:#f2b34a;color:#1a1305;border-radius:10px;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;font-weight:600"><span>{{ selCount }} selected</span><span style="display:flex;gap:10px"><button onClick="{{ clearSel }}" style="background:none;border:1px solid #1a1305;border-radius:6px;padding:6px 12px;cursor:pointer">Clear</button><button onClick="{{ dlSel }}" style="background:#1a1305;color:#f2b34a;border:none;border-radius:6px;padding:6px 14px;cursor:pointer">Download ZIP</button></span></div></sc-if>
+</div></sc-if>
+
+<sc-if value="{{ isBrowse }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex:1">
+<div style="width:240px;border-right:1px solid #2a2a2e;padding:18px;display:flex;flex-direction:column;gap:4px;font-size:14px"><select value="{{ bPr }}" onChange="{{ setBPr }}" style="background:#1d1d21;border:1px solid #3a3a40;border-radius:8px;color:#fff;padding:9px 10px;font-size:14px;font-weight:700;margin-bottom:6px"><sc-for list="{{ projects }}" as="p" hint-placeholder-count="2"><option value="{{ p }}">{{ p }}</option></sc-for></select><span style="font-size:12px;color:#8a8a90;margin-bottom:6px">Season 1</span>
+<sc-for list="{{ tree }}" as="n" hint-placeholder-count="5"><button onClick="{{ n.on }}" style="{{ n.style }}">{{ n.label }}</button></sc-for></div>
+<div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:14px"><div style="color:#9a9aa0;font-size:13px">{{ crumb }}</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start"><sc-for list="{{ bdds }}" as="x" hint-placeholder-count="4"><div style="position:relative"><button onClick="{{ x.toggle }}" style="{{ x.style }}">{{ x.summary }} ▾</button><sc-if value="{{ x.open }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;top:38px;left:0;z-index:20;min-width:190px;max-height:260px;overflow:auto;background:#1d1d21;border:1px solid #3a3a40;border-radius:8px;padding:6px;display:flex;flex-direction:column"><sc-for list="{{ x.opts }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.on }}" style="display:flex;gap:8px;text-align:left;background:none;border:none;color:#e8e6e1;padding:6px 8px;cursor:pointer;font-size:13px"><span style="color:#f2b34a">{{ o.mark }}</span>{{ o.label }}</button></sc-for><button onClick="{{ x.clear }}" style="background:none;border:none;border-top:1px solid #2a2a2e;color:#9a9aa0;padding:8px;cursor:pointer;font-size:12px;text-align:left;margin-top:4px">Clear</button></div></sc-if></div></sc-for><sc-if value="{{ anyFilter }}" hint-placeholder-val="{{ false }}"><button onClick="{{ clearAll }}" style="background:none;border:none;color:#f2b34a;cursor:pointer;font-size:13px;padding:8px 4px">Clear all filters</button></sc-if></div>
+<div style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ typeChips }}" as="t" hint-placeholder-count="7"><button onClick="{{ t.on }}" style="{{ t.style }}">{{ t.label }}</button></sc-for></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px"><sc-for list="{{ browseItems }}" as="c" hint-placeholder-count="4"><div style="{{ c.border }}"><div onClick="{{ c.open }}" style="{{ c.bg }}"><span style="font-size:11px;background:#000a;padding:2px 8px;border-radius:10px">{{ c.type }}</span></div><div style="padding:10px;display:flex;flex-direction:column;gap:4px"><b style="font-size:14px">{{ c.name }}</b><span style="font-size:12px;color:#9a9aa0">{{ c.meta }}</span></div></div></sc-for></div></div></div></sc-if>
+
+<sc-if value="{{ isDetail }}" hint-placeholder-val="{{ false }}"><div style="max-width:1100px;width:100%;margin:0 auto;padding:24px;box-sizing:border-box;display:flex;flex-direction:column;gap:14px">
+<button onClick="{{ back }}" style="align-self:flex-start;background:none;border:none;color:#f2b34a;cursor:pointer;font-size:14px;padding:0">← Back</button>
+<div style="display:flex;gap:24px;flex-wrap:wrap"><div style="flex:1.2;min-width:320px;display:flex;flex-direction:column;gap:10px"><div style="{{ d.bg }}"><span style="position:absolute;top:12px;left:12px;background:{{ d.badgeBg }};color:{{ d.badgeFg }};font-weight:700;font-size:13px;padding:4px 10px;border-radius:6px">V{{ d.shown }}{{ d.badgeNote }}</span><span style="color:#fff8">Preview · {{ d.type }}</span></div>
+<div style="display:flex;gap:10px;flex-wrap:wrap"><sc-for list="{{ thumbs }}" as="t" hint-placeholder-count="3"><button onClick="{{ t.on }}" style="{{ t.style }}">V{{ t.v }}</button></sc-for></div></div>
+<div style="flex:1;min-width:300px;display:flex;flex-direction:column;gap:12px"><h1 style="margin:0;font-size:26px">{{ d.name }}</h1><div style="color:#9a9aa0;font-size:14px">{{ d.meta }}</div>
+<div style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{ d.tags }}" as="t" hint-placeholder-count="3"><span style="background:#26262b;border-radius:12px;padding:3px 10px;font-size:12px">{{ t }}</span></sc-for></div>
+<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;color:#9a9aa0">Used in: <sc-for list="{{ d.uses }}" as="u" hint-placeholder-count="1"><span style="background:#2b2619;color:#f2b34a;border-radius:12px;padding:3px 10px">{{ u }}</span></sc-for></div>
+<button onClick="{{ dlLatest }}" style="background:#f2b34a;color:#1a1305;border:none;border-radius:8px;padding:12px 18px;font-weight:700;cursor:pointer;align-self:flex-start">Download V{{ d.shown }}</button>
+<sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}"><div style="border:1px solid #f2b34a55;background:#1a1710;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px"><b style="font-size:13px;color:#f2b34a">Admin · manage this asset</b>
+<div style="color:#9a9aa0;font-size:12px">Home and linked scenes (one file, many scenes)</div>
+<div style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{ dm.uses }}" as="u" hint-placeholder-count="1"><span style="background:#26262b;border-radius:12px;padding:3px 4px 3px 10px;display:flex;gap:6px;align-items:center;font-size:12px">{{ u.label }}<button onClick="{{ u.rm }}" style="background:none;border:none;color:#9a9aa0;cursor:pointer;padding:0 6px">✕</button></span></sc-for></div>
+<div style="display:flex;gap:8px;align-items:center"><input value="{{ dm.ep }}" onInput="{{ dm.setEp }}" placeholder="Ep" style="background:#121214;border:1px solid #3a3a40;border-radius:6px;color:#fff;padding:7px 10px;width:70px;min-width:0;box-sizing:border-box;outline:none"/><input value="{{ dm.sc }}" onInput="{{ dm.setSc }}" placeholder="Scene" style="background:#121214;border:1px solid #3a3a40;border-radius:6px;color:#fff;padding:7px 10px;width:70px;min-width:0;box-sizing:border-box;outline:none"/><span style="color:#6a6a70;font-size:12px">target scene</span></div>
+<div style="display:flex;flex-wrap:wrap;gap:6px"><button onClick="{{ openAdd }}" style="background:#26262b;color:#e8e6e1;border:none;border-radius:6px;padding:7px 11px;cursor:pointer">+ Add version</button><button onClick="{{ dm.link }}" style="background:#2b2619;color:#f2b34a;border:1px solid #f2b34a;border-radius:6px;padding:7px 11px;cursor:pointer">Link to scene</button><button onClick="{{ dm.del }}" style="background:#3a1d1b;color:#e5736a;border:none;border-radius:6px;padding:7px 11px;cursor:pointer">{{ dm.delLabel }}</button></div></div></sc-if>
+<sc-if value="{{ d.hasAi }}" hint-placeholder-val="{{ false }}"><div style="background:#1d1d21;border-radius:8px;padding:12px;font-size:13px;display:flex;flex-direction:column;gap:6px"><span style="color:#9a9aa0">Model: {{ d.model }}</span><span>{{ d.prompt }}</span></div></sc-if>
+<b style="margin-top:6px">Properties</b>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px"><sc-for list="{{ d.specs }}" as="p" hint-placeholder-count="6"><div style="background:#1d1d21;border-radius:8px;padding:8px 12px;display:flex;flex-direction:column;gap:2px"><span style="font-size:11px;color:#8a8a90">{{ p.k }}</span><span style="font-size:13px">{{ p.v }}</span></div></sc-for></div>
+</div></div></div></sc-if>
+
+<sc-if value="{{ isAdminView }}" hint-placeholder-val="{{ false }}"><div style="max-width:1100px;width:100%;margin:0 auto;padding:24px;box-sizing:border-box;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:28px;align-items:start">
+<div style="display:flex;flex-direction:column;gap:10px"><h2 style="margin:0;font-size:18px">Upload approved asset</h2>
+<div style="border:2px dashed #3a3a40;border-radius:10px;padding:26px;text-align:center;color:#8a8a90;font-size:14px">Drop file here or browse</div>
+<div style="font-size:12px;color:#9a9aa0;margin-bottom:-4px">Project *</div><select value="{{ f.project }}" onChange="{{ fProject }}" style="{{ inp }}"><option value="">Select project…</option><sc-for list="{{ projects }}" as="p" hint-placeholder-count="2"><option value="{{ p }}">{{ p }}</option></sc-for><option value="__new">+ Add new project</option></select>
+<sc-if value="{{ newProj }}" hint-placeholder-val="{{ false }}"><input value="{{ f.newName }}" onInput="{{ fNewName }}" placeholder="New project name *" style="{{ inp }}"/></sc-if>
+<div style="font-size:12px;color:#9a9aa0;margin-bottom:-4px">Asset type *</div><select value="{{ f.type }}" onChange="{{ fType }}" style="{{ inp }}"><sc-for list="{{ types }}" as="t" hint-placeholder-count="6"><option value="{{ t }}">{{ t }}</option></sc-for></select>
+<input value="{{ f.name }}" onInput="{{ fName }}" placeholder="Asset name *" style="{{ inp }}"/>
+<input value="{{ f.sc }}" onInput="{{ fSc }}" placeholder="{{ scPh }}" style="{{ inp }}"/>
+<sc-if value="{{ isScript }}" hint-placeholder-val="{{ false }}"><input value="{{ f.ver }}" onInput="{{ fVer }}" placeholder="Version no. * e.g. 5" style="{{ inp }}"/></sc-if>
+<div style="font-size:11px;color:#6a6a70;margin-top:-4px">Multiple scenes: ep01 sc03, ep04 sc05. First is home; the rest are linked. Caps and leading zeros don't matter.</div>
+<input value="{{ f.model }}" onInput="{{ fModel }}" placeholder="AI model (optional)" style="{{ inp }}"/>
+<textarea value="{{ f.prompt }}" onInput="{{ fPrompt }}" placeholder="Prompt text (optional)" style="{{ inp }};height:70px"></textarea>
+<div style="font-size:12px;color:#9a9aa0;margin-top:4px">Search tags (optional)</div>
+<input value="{{ f.chars }}" onInput="{{ fChars }}" placeholder="Characters, comma separated" style="{{ inp }}"/>
+
+<input value="{{ f.loc }}" onInput="{{ fLoc }}" placeholder="Location" style="{{ inp }}"/>
+<input value="{{ f.props }}" onInput="{{ fProps }}" placeholder="Props, comma separated" style="{{ inp }}"/>
+
+<button onClick="{{ publish }}" style="background:#f2b34a;color:#1a1305;border:none;border-radius:8px;padding:12px;font-weight:700;cursor:pointer">Publish</button></div>
+<div style="display:flex;flex-direction:column;gap:8px"><h2 style="margin:0;font-size:18px">Manage assets</h2>
+<div style="font-size:12px;color:#8a8a90">Open any asset to manage it (also available from Search and Browse while in Admin mode).</div><sc-for list="{{ manage }}" as="m" hint-placeholder-count="6"><div style="display:flex;align-items:center;gap:10px;background:#1d1d21;border-radius:8px;padding:10px 12px;font-size:13px"><div style="flex:1;min-width:0"><b>{{ m.name }}</b><div style="color:#8a8a90;font-size:12px">{{ m.meta }}</div></div><span style="color:#f2b34a">v{{ m.ver }}</span><button onClick="{{ m.view }}" style="background:#26262b;color:#e8e6e1;border:none;border-radius:6px;padding:6px 10px;cursor:pointer">Open</button></div></sc-for>
+<div style="font-size:12px;color:#8a8a90;margin-top:6px">Admins (3 of 3): Anika R. · Dev M. · Sara K.</div></div></div></sc-if>
+
+<sc-if value="{{ addOpen }}" hint-placeholder-val="{{ false }}"><div style="position:fixed;inset:0;background:#000b;display:flex;align-items:center;justify-content:center;z-index:50"><div style="background:#18181b;border:1px solid #3a3a40;border-radius:12px;padding:24px;width:380px;max-width:90vw;display:flex;flex-direction:column;gap:14px"><b style="font-size:17px">Add version · {{ d.name }}</b>
+<div onClick="{{ pickFile }}" style="border:2px dashed {{ dropBorder }};border-radius:10px;padding:34px 16px;text-align:center;color:{{ dropColor }};font-size:14px;cursor:pointer">{{ dropText }}</div>
+<div style="display:flex;gap:8px;justify-content:flex-end"><button onClick="{{ cancelAdd }}" style="background:none;color:#b5b3ae;border:1px solid #3a3a40;border-radius:6px;padding:8px 14px;cursor:pointer">Cancel</button><sc-if value="{{ hasFile }}" hint-placeholder-val="{{ false }}"><button onClick="{{ doUpload }}" style="background:#f2b34a;color:#1a1305;border:none;border-radius:6px;padding:8px 16px;font-weight:700;cursor:pointer">Upload</button></sc-if></div></div></div></sc-if>
+<sc-if value="{{ askPw }}" hint-placeholder-val="{{ false }}"><div style="position:fixed;inset:0;background:#000b;display:flex;align-items:center;justify-content:center"><div style="background:#18181b;border:1px solid #3a3a40;border-radius:12px;padding:24px;width:320px;display:flex;flex-direction:column;gap:12px"><b style="font-size:17px">Admin access</b><span style="font-size:13px;color:#9a9aa0">Enter the admin password to upload and manage assets.</span><input type="password" value="{{ pw }}" onInput="{{ setPw }}" onKeyDown="{{ pwKey }}" placeholder="Password" style="background:#1d1d21;border:1px solid {{ pwBorder }};border-radius:8px;color:#fff;padding:10px 12px;font-size:14px;outline:none"/><span style="font-size:12px;color:#e5736a;min-height:14px">{{ pwErr }}</span><div style="display:flex;gap:8px;justify-content:flex-end"><button onClick="{{ pwCancel }}" style="background:none;color:#b5b3ae;border:1px solid #3a3a40;border-radius:6px;padding:8px 14px;cursor:pointer">Cancel</button><button onClick="{{ pwSubmit }}" style="background:#f2b34a;color:#1a1305;border:none;border-radius:6px;padding:8px 16px;font-weight:700;cursor:pointer">Unlock</button></div><span style="font-size:11px;color:#6a6a70">Prototype password: admin123</span></div></div></sc-if>
+<sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}"><div style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#e8e6e1;color:#121214;padding:10px 18px;border-radius:8px;font-size:14px;font-weight:600">{{ toast }}</div></sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { viewVer:null, addOpen:false, addFile:'', fl:{pr:[],ep:[],sc:[],ch:[]}, dd:null, bPr:'Moonlit Harbor',
+    view:'search', role:'member', q:'', sel:[], detailId:null, typeF:'All', bEp:1, bSc:0, toast:'', prev:'search',
+    f:{project:'',newName:'',name:'',type:'Character Sheet',sc:'',ver:'',chars:'',loc:'',props:'',model:'',prompt:''}, openId:null, delId:null, mEp:'', mSc:'',
+    assets:[
+      {id:13,project:'Neon Monsoon',name:'Rhea – Character Sheet',type:'Character Sheet',ep:1,sc:2,chars:['Rhea'],loc:'Night Market',props:['Umbrella'],ver:1},
+      {id:14,project:'Neon Monsoon',name:'Night Market Keyframe',type:'Keyframe',ep:1,sc:2,chars:['Rhea','Arjun'],loc:'Night Market',props:['Umbrella'],ver:2},
+      {id:1,name:'Arjun – Character Sheet',type:'Character Sheet',ep:1,sc:3,chars:['Arjun'],loc:'Harbor',props:['Lantern'],ver:4,also:[{ep:2,sc:1},{ep:2,sc:4}],model:'Flux Pro',prompt:'Weathered fisherman, 40s, linen coat, cinematic, three-quarter turnaround'},
+      {id:2,name:'Meera – Character Sheet',type:'Character Sheet',ep:1,sc:3,chars:['Meera'],loc:'Harbor',props:[],ver:2,also:[{ep:2,sc:1}]},
+      {id:3,name:'Harbor at Dusk',type:'Location',ep:1,sc:3,chars:[],loc:'Harbor',props:['Boat'],ver:1,model:'Midjourney v7',prompt:'Fishing harbor at dusk, teal haze, lanterns'},
+      {id:4,name:'Arjun on the Pier',type:'Keyframe',ep:1,sc:3,chars:['Arjun'],loc:'Harbor',props:['Lantern'],ver:1,model:'Veo 3',prompt:'Wide shot, Arjun walks the pier'},
+      {id:5,name:'Ep01 Script',type:'Script',ep:1,sc:0,chars:['Arjun','Meera'],loc:'',props:[],ver:5},
+      {id:6,name:'Sc03 Storyboard',type:'Storyboard',ep:1,sc:3,chars:['Arjun','Meera'],loc:'Harbor',props:[],ver:2},
+      {id:7,name:'Arjun VO – Sc03',type:'Voice-over',ep:1,sc:3,chars:['Arjun'],loc:'',props:[],ver:1},
+      {id:8,name:'Lighthouse Interior',type:'Location',ep:2,sc:1,chars:[],loc:'Lighthouse',props:['Map'],ver:1},
+      {id:9,name:'Meera at the Window',type:'Keyframe',ep:2,sc:1,chars:['Meera'],loc:'Lighthouse',props:['Map'],ver:2},
+      {id:10,name:'Ep02 Script',type:'Script',ep:2,sc:0,chars:['Arjun','Meera'],loc:'',props:[],ver:3},
+      {id:11,name:'Arjun – Storm Keyframe',type:'Keyframe',ep:2,sc:4,chars:['Arjun'],loc:'Harbor',props:['Boat'],ver:1},
+      {id:12,name:'Old Map',type:'Location',ep:2,sc:1,chars:[],loc:'Lighthouse',props:['Map'],ver:1}
+    ]
+  };
+  types = ['Character Sheet','Location','Keyframe','Script','Storyboard','Voice-over'];
+  hues = {'Character Sheet':30,'Location':190,'Keyframe':280,'Script':100,'Storyboard':340,'Voice-over':55};
+  go = v => this.setState({view:v,detailId:null});
+  say = t => { this.setState({toast:t}); clearTimeout(this._t); this._t = setTimeout(()=>this.setState({toast:''}),2200); };
+  submitPw() {
+    if (this.state.pw === 'admin123') { this.setState({role:'admin',askPw:false,pw:'',pwErr:'',view:'admin'}); this.say('Admin unlocked'); }
+    else this.setState({pwErr:'Incorrect password'});
+  }
+  parse(q) {
+    const chips = [], f = {ep:null,sc:null,txt:[]};
+    q.split(',').map(s=>s.trim()).filter(Boolean).forEach(t=>{
+      let m;
+      if ((m = t.match(/^ep(?:isode)?\s*0*(\d+)$/i))) { f.ep = +m[1]; chips.push('Episode '+m[1]); }
+      else if ((m = t.match(/^s(?:c|cene)?\s*0*(\d+)$/i))) { f.sc = +m[1]; chips.push('Scene '+m[1]); }
+      else { f.txt.push(t.toLowerCase()); chips.push('Name/tag: '+t); }
+    });
+    return {chips,f};
+  }
+  mk(a) { const s=this.state;
+        const tEp=+s.mEp, tSc=+s.mSc||0, ok=()=>{ if(!tEp){this.say('Enter a target episode');return false;} return true; };
+        return {name:a.name,ver:a.ver,meta:`${a.type} · ${this.uses(a).length} scene${this.uses(a).length>1?'s':''}`,
+        
+        ep:s.mEp, sc:s.mSc, setEp:e=>this.setState({mEp:e.target.value}), setSc:e=>this.setState({mSc:e.target.value}),
+        uses:this.uses(a).map((u,i)=>({label:this.ul(u),rm:()=>{const arr=this.uses(a).filter((_,j)=>j!==i); if(!arr.length) return this.say('Needs at least one scene'); this.upd(a.id,x=>({...x,ep:arr[0].ep,sc:arr[0].sc,also:arr.slice(1)}));}})),
+        view:()=>this.setState({viewVer:null,mEp:'',mSc:'',delId:null,detailId:a.id,prev:'admin',view:'detail'}),
+        addVer:()=>{this.upd(a.id,x=>({...x,ver:x.ver+1}));this.say(`${a.name} is now v${a.ver+1}`);},
+        link:()=>{ if(!ok()) return; if(this.uses(a).some(u=>u.ep===tEp&&u.sc===tSc)) return this.say('Already linked'); this.upd(a.id,x=>({...x,also:[...(x.also||[]),{ep:tEp,sc:tSc}]})); this.say('Linked to '+this.ul({ep:tEp,sc:tSc})); },
+        move:()=>{ if(!ok()) return; this.upd(a.id,x=>({...x,ep:tEp,sc:tSc,also:[]})); this.say('Moved to '+this.ul({ep:tEp,sc:tSc})); },
+        copy:()=>{ const c={...a,id:Date.now(),name:a.name+' (copy)',ver:1,also:[]}; if(tEp){c.ep=tEp;c.sc=tSc;} this.setState(st=>({assets:[c,...st.assets]})); this.say('Duplicated'); },
+        delLabel:s.delId===a.id?'Confirm delete?':'Delete',
+        del:()=>{ if(s.delId===a.id){ this.setState(st=>({assets:st.assets.filter(x=>x.id!==a.id),delId:null,detailId:null,view:st.prev==='detail'?'search':st.prev})); this.say('Deleted'); } else this.setState({delId:a.id}); }};
+  }
+  parseScenes(str) {
+    return str.split(',').map(t=>{
+      const e=t.match(/ep\D*?0*(\d+)/i); if(!e) return null;
+      const r=t.replace(e[0],' '), c=r.match(/s(?:c|cene)?\D*?0*(\d+)/i);
+      return {ep:+e[1],sc:c?+c[1]:0};
+    }).filter(Boolean);
+  }
+  specs(a) {
+    const n=a.id%7, mb=(v)=>v.toFixed(1)+' MB', t=a.type, d=[['Type',t],['Version','v'+a.ver+' (latest)'],['Uploaded by',['Anika R.','Dev M.','Sara K.'][a.id%3]]];
+    let p;
+    if(t==='Voice-over'){const s=18+n*7; p=[['Format','WAV 24-bit'],['Duration','0:'+String(s).padStart(2,'0')],['Sample rate','48 kHz'],['Channels','Mono'],['Size',mb(2.4+n*0.9)]];}
+    else if(t==='Script'){p=[['Format','PDF'],['Pages',String(18+n*4)],['Words',String(3200+n*410)],['Size',mb(0.4+n*0.1)]];}
+    else if(t==='Storyboard'){p=[['Format','PDF'],['Panels',String(12+n*3)],['Page size','A4 landscape'],['Size',mb(6+n*1.3)]];}
+    else if(t==='Keyframe'){p=[['Format','PNG'],['Resolution','3840 × 2160'],['Aspect ratio','16:9'],['Color space','sRGB'],['Size',mb(7+n*1.1)]];}
+    else {p=[['Format','PNG'],['Resolution','4096 × 4096'],['Aspect ratio','1:1'],['Color space','sRGB'],['Size',mb(11+n*1.4)]];}
+    return [...p,...d];
+  }
+  uses = a => [{ep:a.ep,sc:a.sc},...(a.also||[])];
+  ul = u => 'Ep '+u.ep+(u.sc?' · Sc '+u.sc:' · all');
+  upd = (id,fn) => this.setState(st=>({assets:st.assets.map(x=>x.id===id?fn(x):x)}));
+  pr = a => a.project||'Moonlit Harbor';
+  fm(a, fl) {
+    if (fl.pr.length && !fl.pr.includes(this.pr(a))) return false;
+    if (fl.ch.length && !fl.ch.some(c=>a.chars.includes(c))) return false;
+    return this.uses(a).some(u=>(!fl.ep.length||fl.ep.includes(u.ep))&&(!fl.sc.length||fl.sc.includes(u.sc)));
+  }
+  dd(key,label,opts,fmt){
+    const s=this.state, sel=s.fl[key];
+    return {summary:sel.length?`${label} · ${sel.length}`:label, open:s.dd===key,
+      style:`border-radius:8px;padding:8px 14px;cursor:pointer;font-size:13px;border:1px solid ${sel.length?'#f2b34a':'#3a3a40'};background:${sel.length?'#2b2619':'#1d1d21'};color:${sel.length?'#f2b34a':'#e8e6e1'}`,
+      toggle:()=>this.setState(st=>({dd:st.dd===key?null:key})),
+      clear:()=>this.setState(st=>({fl:{...st.fl,[key]:[]}})),
+      opts:opts.map(v=>({label:fmt?fmt(v):v,mark:sel.includes(v)?'☑':'☐',on:()=>this.setState(st=>({fl:{...st.fl,[key]:st.fl[key].includes(v)?st.fl[key].filter(x=>x!==v):[...st.fl[key],v]}}))}))};
+  }
+  match(a, f, typeF) {
+    if (!this.uses(a).some(u=>(f.ep==null||u.ep===f.ep)&&(f.sc==null||u.sc===f.sc))) return false;
+    if (typeF && typeF!=='All' && a.type!==typeF) return false;
+    const hay = [a.name,a.loc,...a.chars,...a.props,this.pr(a)].join(' ').toLowerCase();
+    return f.txt.every(t=>hay.includes(t));
+  }
+  card(a) {
+    const h = this.hues[a.type], sel = this.state.sel.includes(a.id);
+    return {
+      name:a.name, type:a.type, meta:`${this.ul(a)}${(a.also||[]).length?' +'+a.also.length+' more':''} · v${a.ver}`,
+      bg:`height:120px;cursor:pointer;background:linear-gradient(135deg,hsl(${h} 25% 22%),hsl(${h} 20% 12%));padding:8px;display:flex;align-items:flex-start`,
+      border:`background:#18181b;border:1.5px solid ${sel?'#f2b34a':'#2a2a2e'};border-radius:10px;overflow:hidden`,
+      check: sel?'☑':'☐',
+      open:()=>this.setState({viewVer:null,mEp:'',mSc:'',delId:null,detailId:a.id,prev:this.state.view,view:'detail'}),
+      toggle:()=>this.setState(s=>({sel:s.sel.includes(a.id)?s.sel.filter(x=>x!==a.id):[...s.sel,a.id]}))
+    };
+  }
+  renderVals() {
+    const s = this.state, admin = s.role==='admin';
+    const {chips,f} = this.parse(s.q);
+    const results = s.assets.filter(a=>this.match(a,f,s.typeF)&&this.fm(a,s.fl));
+    const A=s.assets, uniq=x=>[...new Set(x)], nsort=(a,b)=>a-b;
+    const us=A.flatMap(a=>this.uses(a));
+    const dds=[this.dd('pr','Project',uniq(A.map(this.pr)).sort()),this.dd('ep','Episode',uniq(us.map(u=>u.ep)).sort(nsort),v=>'Episode '+v),this.dd('sc','Scene',uniq(us.map(u=>u.sc).filter(Boolean)).sort(nsort),v=>'Scene '+v)];
+    const PA=A.filter(a=>this.pr(a)===s.bPr);
+    const anyFilter=Object.values(s.fl).some(x=>x.length);
+    const navB = on=>`background:${on?'#26262b':'none'};color:${on?'#fff':'#9a9aa0'};border:none;border-radius:6px;padding:8px 14px;cursor:pointer;font-size:14px`;
+    const rb = on=>`background:${on?'#f2b34a':'none'};color:${on?'#1a1305':'#9a9aa0'};border:none;border-radius:4px;padding:5px 12px;cursor:pointer`;
+    const d = s.assets.find(a=>a.id===s.detailId) || s.assets[0];
+    const dh = this.hues[d.type]; const shown = Math.min(s.viewVer||d.ver, d.ver);
+    const tree = [];
+    uniq(PA.flatMap(a=>this.uses(a)).map(u=>u.ep)).sort(nsort).forEach(e=>{
+      tree.push({label:'Episode '+e,style:`text-align:left;background:${s.bEp===e&&!s.bSc?'#26262b':'none'};color:#e8e6e1;border:none;padding:8px 10px;border-radius:6px;cursor:pointer;font-weight:600`,on:()=>this.setState({bEp:e,bSc:0})});
+      [...new Set(PA.flatMap(a=>this.uses(a)).filter(u=>u.ep===e&&u.sc).map(u=>u.sc))].sort().forEach(c=>tree.push({label:'Scene '+c,style:`text-align:left;background:${s.bEp===e&&s.bSc===c?'#26262b':'none'};color:#b5b3ae;border:none;padding:6px 10px 6px 26px;border-radius:6px;cursor:pointer`,on:()=>this.setState({bEp:e,bSc:c})}));
+    });
+    const bi = PA.filter(a=>this.uses(a).some(u=>u.ep===s.bEp&&(!s.bSc||u.sc===s.bSc))&&(!s.fl.ch.length||s.fl.ch.some(c=>a.chars.includes(c)))&&(s.typeF==='All'||a.type===s.typeF));
+    const F = s.f, set = k=>e=>this.setState(st=>({f:{...st.f,[k]:e.target.value}}));
+    const list = x=>x.split(',').map(t=>t.trim()).filter(Boolean);
+    return {
+      dds, anyFilter, bdds:[], projects:uniq(A.map(this.pr)).sort(), bPr:s.bPr,
+      setBPr:e=>this.setState({bPr:e.target.value,bEp:1,bSc:0}),
+      clearAll:()=>this.setState({fl:{pr:[],ep:[],sc:[],ch:[]},typeF:'All',dd:null}),
+      thumbs:Array.from({length:d.ver},(_,k)=>k+1).map(v=>({v,on:()=>this.setState({viewVer:v}),style:`width:92px;height:68px;border-radius:8px;cursor:pointer;font-weight:700;font-size:13px;color:#e8e6e1;background:linear-gradient(135deg,hsl(${dh} 22% 20%),hsl(${dh} 18% 11%));border:2px solid ${v===shown?'#f2b34a':'#2a2a2e'}`})),
+      addOpen:s.addOpen, hasFile:!!s.addFile, dropText:s.addFile?('✓ '+s.addFile):'Drop file here or click to browse', dropBorder:s.addFile?'#f2b34a':'#3a3a40', dropColor:s.addFile?'#f2b34a':'#8a8a90',
+      openAdd:()=>this.setState({addOpen:true,addFile:''}), cancelAdd:()=>this.setState({addOpen:false,addFile:''}),
+      pickFile:()=>this.setState({addFile:d.name.replace(/ – /g,'_').replace(/\s+/g,'_')+'_v'+(d.ver+1)+'.'+(d.type==='Voice-over'?'wav':d.type==='Script'||d.type==='Storyboard'?'pdf':'png')}),
+      doUpload:()=>{ this.upd(d.id,x=>({...x,ver:x.ver+1})); this.setState({addOpen:false,addFile:'',viewVer:null}); this.say('Version '+(d.ver+1)+' uploaded'); },
+      isAdmin:admin, isSearch:s.view==='search', isBrowse:s.view==='browse', isDetail:s.view==='detail', isAdminView:s.view==='admin'&&admin,
+      navSearch:navB(s.view==='search'), navBrowse:navB(s.view==='browse'), navAdmin:navB(s.view==='admin'),
+      roleMember:rb(!admin), roleAdmin:rb(admin),
+      goSearch:()=>{this.go('search');this.setState({dd:null});}, goBrowse:()=>{this.go('browse');this.setState({dd:null});}, goAdmin:()=>this.go('admin'),
+      asMember:()=>this.setState({role:'member',view:s.view==='admin'?'search':s.view}), asAdmin:()=>this.setState(st=>st.role==='admin'?null:{askPw:true,pw:'',pwErr:''}),
+      askPw:!!s.askPw, pw:s.pw||'', pwErr:s.pwErr||'', pwBorder:s.pwErr?'#e5736a':'#3a3a40',
+      setPw:e=>this.setState({pw:e.target.value,pwErr:''}),
+      pwKey:e=>{ if(e.key==='Enter') this.submitPw(); },
+      pwSubmit:()=>this.submitPw(), pwCancel:()=>this.setState({askPw:false,pw:'',pwErr:''}),
+      q:s.q, setQ:e=>this.setState({q:e.target.value}), chips,
+      hint: chips.length?'How your search was read':'Separate terms with commas: name, ep01, sc03',
+      typeChips:['All',...this.types].map(t=>({label:t,on:()=>this.setState({typeF:t}),style:`border-radius:16px;padding:6px 14px;cursor:pointer;font-size:13px;border:1px solid ${s.typeF===t?'#f2b34a':'#3a3a40'};background:${s.typeF===t?'#2b2619':'none'};color:${s.typeF===t?'#f2b34a':'#b5b3ae'}`})),
+      count:`${results.length} asset${results.length===1?'':'s'}`, selInfo:'', results:results.map(a=>this.card(a)), noResults:!results.length,
+      hasSel:s.sel.length>0, selCount:s.sel.length, clearSel:()=>this.setState({sel:[]}),
+      dlSel:()=>{ this.say(`Downloading ${s.sel.length} assets as assets.zip`); this.setState({sel:[]}); },
+      tree, crumb:`${s.bPr} / Season 1 / Episode ${s.bEp}${s.bSc?' / Scene '+s.bSc:''} · ${bi.length} assets`, browseItems:bi.map(a=>this.card(a)),
+      d:{shown,badgeBg:shown===d.ver?'#f2b34a':'#000a',badgeFg:shown===d.ver?'#1a1305':'#fff',badgeNote:shown===d.ver?' · latest':'',specs:this.specs(d),uses:this.uses(d).map(this.ul),name:d.name,type:d.type,ver:d.ver,meta:`Ep ${d.ep} · ${d.sc?'Scene '+d.sc:'All scenes'} · ${this.pr(d)} · S1`,tags:[...d.chars,d.loc,...d.props].filter(Boolean),
+        bg:`position:relative;width:100%;height:380px;border-radius:12px;background:linear-gradient(135deg,hsl(${dh} 25% 24%),hsl(${dh} 20% 10%));display:flex;align-items:center;justify-content:center`,
+        hasAi:!!d.model, model:d.model, prompt:d.prompt},
+      back:()=>this.setState({view:s.prev==='detail'?'search':s.prev}),
+      dlLatest:()=>this.say(`Downloading ${d.name} v${d.ver}`),
+      versions:Array.from({length:d.ver},(_,i)=>d.ver-i).map(v=>({label:`v${v}${v===d.ver?' · latest':''}`,dl:()=>this.say(`Downloading ${d.name} v${v}`)})),
+      f:F, inp:'min-width:0;box-sizing:border-box;width:100%;background:#1d1d21;border:1px solid #3a3a40;border-radius:8px;color:#fff;padding:10px 12px;font-size:14px;flex:1;outline:none;font-family:inherit',
+      types:this.types, fName:set('name'), fProject:set('project'), fNewName:set('newName'), newProj:F.project==='__new', fVer:set('ver'), isScript:F.type==='Script', scPh:F.type==='Script'?'Episode no. * e.g. ep01 (or ep01, ep02)':'Scenes * e.g. ep01 sc03, ep04 sc05',  fType:set('type'), fEp:set('ep'), fSc:set('sc'), fChars:set('chars'), fLoc:set('loc'), fProps:set('props'), fModel:set('model'), fPrompt:set('prompt'),
+      publish:()=>{
+        const proj=F.project==='__new'?F.newName.trim():F.project;
+        if(!proj) return this.say('Select a project or enter a new project name');
+        const us=this.parseScenes(F.sc);
+        if(!F.name||!us.length) return this.say(F.type==='Script'?'Name and episode (e.g. ep01) are required':'Name and at least one scene (e.g. ep01 sc03) are required');
+        if(F.type==='Script'&&!(+F.ver>0)) return this.say('Enter the script version number');
+        const a={project:proj,id:Date.now(),name:F.name,type:F.type,ep:us[0].ep,sc:us[0].sc,also:us.slice(1),chars:list(F.chars),loc:F.loc,props:list(F.props),ver:F.type==='Script'?+F.ver:1,model:F.model,prompt:F.prompt};
+        this.setState(st=>({assets:[a,...st.assets],f:{project:'',newName:'',name:'',type:'Character Sheet',sc:'',ver:'',chars:'',loc:'',props:'',model:'',prompt:''}}));
+        this.say('Published');
+      },
+      manage:s.assets.map(a=>this.mk(a)), dm:this.mk(d),
+      toast:s.toast
+    };
+  }
+}
+</script>
+</body>
+</html>

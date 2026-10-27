@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><style>body{margin:0;background:#f4f4f2}a{color:#222}a:hover{color:#666}</style></helmet>
+<div style="font-family:system-ui,sans-serif;color:#222;max-width:1100px;margin:0 auto;padding:40px 32px;display:flex;flex-direction:column;gap:40px">
+<div><div style="font-size:12px;letter-spacing:.08em;color:#666">PHASE 2 · WIREFRAME / GRAYSCALE · DRAFT FOR APPROVAL</div>
+<h1 style="margin:6px 0 8px;font-size:32px">Asset Hub: information architecture and flows</h1>
+<div style="font-size:15px;color:#444;max-width:720px">Internal, desktop web. 3 Admins upload approved assets; everyone else searches, previews and downloads.</div></div>
+
+<section style="display:flex;flex-direction:column;gap:14px"><h2 style="margin:0;font-size:20px">1. Sitemap</h2>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px">
+<sc-for list="{{ pages }}" as="p" hint-placeholder-count="5"><div style="background:#fff;border:1.5px solid #222;border-radius:6px;padding:14px;display:flex;flex-direction:column;gap:6px"><div style="font-size:11px;color:#666">{{ p.who }}</div><div style="font-weight:700">{{ p.name }}</div><div style="font-size:13px;color:#444">{{ p.desc }}</div></div></sc-for>
+</div></section>
+
+<section style="display:flex;flex-direction:column;gap:14px"><h2 style="margin:0;font-size:20px">2. Hierarchy and metadata</h2>
+<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:14px"><span style="background:#222;color:#fff;padding:8px 14px;border-radius:4px">Project</span>→<span style="background:#222;color:#fff;padding:8px 14px;border-radius:4px">Season</span>→<span style="background:#222;color:#fff;padding:8px 14px;border-radius:4px">Episode</span>→<span style="background:#222;color:#fff;padding:8px 14px;border-radius:4px">Scene</span>→<span style="border:1.5px solid #222;padding:8px 14px;border-radius:4px;background:#fff">Asset (versions v1, v2…)</span></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;font-size:14px">
+<div style="background:#fff;border:1px solid #bbb;border-radius:6px;padding:14px"><b>Asset types</b><br>Character Sheet · Location · Keyframe · Script · Storyboard · Voice-over</div>
+<div style="background:#fff;border:1px solid #bbb;border-radius:6px;padding:14px"><b>Searchable tags (required)</b><br>Project · Episode · Scene no. · Character · Location · Props</div>
+<div style="background:#fff;border:1px solid #bbb;border-radius:6px;padding:14px"><b>Optional on upload</b><br>AI model used · Prompt text</div></div></section>
+
+<section style="display:flex;flex-direction:column;gap:18px"><h2 style="margin:0;font-size:20px">3. Key flows</h2>
+<sc-for list="{{ flows }}" as="f" hint-placeholder-count="5"><div style="background:#fff;border:1px solid #bbb;border-radius:6px;padding:16px;display:flex;flex-direction:column;gap:12px"><div style="display:flex;justify-content:space-between;gap:12px"><b>{{ f.title }}</b><span style="font-size:12px;color:#666">{{ f.who }}</span></div>
+<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center"><sc-for list="{{ f.steps }}" as="s" hint-placeholder-count="4"><span style="border:1.5px solid #222;border-radius:4px;padding:8px 12px;font-size:13px;background:#f4f4f2">{{ s }}</span></sc-for></div></div></sc-for></section>
+
+<section style="display:flex;flex-direction:column;gap:10px"><h2 style="margin:0;font-size:20px">4. Proposed Phase 3 wireframes</h2>
+<div style="font-size:14px;color:#444;line-height:1.6">Search home with filters · Search results grid · Project browser · Asset detail with version history · Admin upload form · Admin manage assets and versions.<br><b>Open for you:</b> multi-select bulk download as a ZIP, and whether Admin management is only the 3 named people.</div></section>
+<div style="padding:16px;background:#222;color:#fff;border-radius:6px;font-size:14px">Reply "confirmed" to proceed to Phase 3 wireframes, or send changes.</div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      pages: [
+        {who:'Everyone',name:'Search home',desc:'One search bar, filters for project, episode, scene, character, location, props, type.'},
+        {who:'Everyone',name:'Results',desc:'Thumbnail grid or list, quick preview, multi-select download.'},
+        {who:'Everyone',name:'Project browser',desc:'Project → Season → Episode → Scene tree with asset counts.'},
+        {who:'Everyone',name:'Asset detail',desc:'Preview, tags, model and prompt, version history, download.'},
+        {who:'Admins (3)',name:'Upload and manage',desc:'Upload new asset or version, edit tags, retire assets, manage the 3 admins.'}
+      ],
+      flows: [
+        {title:'A. Find by search',who:'Everyone',steps:['Type name or tag','Refine with filters','Scan results','Quick preview','Download']},
+        {title:'B. Find by browsing',who:'Everyone',steps:['Open project','Pick episode','Pick scene','See scene assets by type','Download']},
+        {title:'C. Bulk download',who:'Everyone',steps:['Select several results','Selection tray','Download as ZIP']},
+        {title:'D. Upload new asset',who:'Admin',steps:['Drop file(s)','Choose type','Set project, episode, scene','Add character, location, props tags','Optional: model and prompt','Publish']},
+        {title:'E. Upload new version',who:'Admin',steps:['Open asset','Add version','Add change note','Publish as latest; older stay downloadable']}
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

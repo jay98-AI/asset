@@ -1,0 +1,41 @@
+{
+  "search": [
+    {
+      "id": "label-content-name-mismatch",
+      "impact": "serious",
+      "help": "Elements must have their visible text as part of their accessible name",
+      "nodes": 14,
+      "sampleTarget": "button[aria-label=\"Open Rhea – Character Sheet\"]"
+    }
+  ],
+  "browse": [
+    {
+      "id": "label-content-name-mismatch",
+      "impact": "serious",
+      "help": "Elements must have their visible text as part of their accessible name",
+      "nodes": 7,
+      "sampleTarget": "button[aria-label=\"Open Arjun – Character Sheet\"]"
+    }
+  ],
+  "detail": [],
+  "login": [
+    {
+      "id": "label-content-name-mismatch",
+      "impact": "serious",
+      "help": "Elements must have their visible text as part of their accessible name",
+      "nodes": 14,
+      "sampleTarget": "button[aria-label=\"Open Rhea – Character Sheet\"]"
+    }
+  ],
+  "admin": [],
+  "adminDetail": [],
+  "search-mobile": [
+    {
+      "id": "label-content-name-mismatch",
+      "impact": "serious",
+      "help": "Elements must have their visible text as part of their accessible name",
+      "nodes": 14,
+      "sampleTarget": "button[aria-label=\"Open Rhea – Character Sheet\"]"
+    }
+  ]
+}

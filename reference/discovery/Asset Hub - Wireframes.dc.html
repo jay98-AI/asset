@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><style>body{margin:0;background:#f4f4f2}a{color:#222}a:hover{color:#666}</style></helmet>
+<div style="font-family:system-ui,sans-serif;color:#222;max-width:1240px;margin:0 auto;padding:40px 32px;display:flex;flex-direction:column;gap:32px">
+<div><div style="font-size:12px;letter-spacing:.08em;color:#666">PHASE 3 · DESKTOP WIREFRAMES · GRAYSCALE · DRAFT FOR APPROVAL</div>
+<h1 style="margin:6px 0;font-size:30px">Asset Hub wireframes</h1>
+<div style="font-size:14px;color:#444">Six screens. Gray boxes are previews; dashed boxes are optional.</div></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(520px,1fr));gap:28px">
+
+<div style="display:flex;flex-direction:column;gap:8px"><b>1. Search home</b>
+<div style="background:#fff;border:1.5px solid #222;border-radius:6px;overflow:hidden;height:380px;display:flex;flex-direction:column">
+<div style="display:flex;justify-content:space-between;padding:10px 14px;border-bottom:1px solid #bbb;font-size:13px"><b>Asset Hub</b><span>Search · Browse · Admin</span><span>Name ▾</span></div>
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:20px">
+<div style="width:80%;border:2px solid #222;border-radius:24px;padding:12px 18px;font-size:14px;color:#777">Try: Arjun, ep01, sc03</div>
+<div style="width:80%;border:1px solid #bbb;border-radius:6px;padding:8px 12px;font-size:12px;color:#444;line-height:1.6;background:#fafafa"><b>Search tip:</b> separate terms with commas. Order doesn't matter.<br>Arjun → character/location/prop · ep01 → episode · sc03 → scene</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;font-size:12px"><span style="border:1px solid #222;border-radius:12px;padding:4px 10px">Project ▾</span><span style="border:1px solid #222;border-radius:12px;padding:4px 10px">Episode ▾</span><span style="border:1px solid #222;border-radius:12px;padding:4px 10px">Scene no. ▾</span><span style="border:1px solid #222;border-radius:12px;padding:4px 10px">Type ▾</span></div>
+<div style="font-size:12px;color:#666">Type chips: Character Sheet · Location · Keyframe · Script · Storyboard · Voice-over</div>
+<div style="width:80%;font-size:12px;color:#444"><b>Recently added</b><div style="display:flex;gap:8px;margin-top:6px"><div style="flex:1;height:60px;background:#ddd"></div><div style="flex:1;height:60px;background:#ddd"></div><div style="flex:1;height:60px;background:#ddd"></div><div style="flex:1;height:60px;background:#ddd"></div></div></div></div></div></div>
+
+<div style="display:flex;flex-direction:column;gap:8px"><b>2. Results</b>
+<div style="background:#fff;border:1.5px solid #222;border-radius:6px;overflow:hidden;height:380px;display:flex;flex-direction:column;font-size:12px">
+<div style="padding:10px 14px;border-bottom:1px solid #bbb;display:flex;gap:10px;align-items:center"><span style="flex:1;border:1.5px solid #222;border-radius:16px;padding:6px 12px;display:flex;gap:6px;align-items:center">Mara, ep04, sc12 → <i style="background:#ddd;padding:1px 6px;border-radius:8px">Name: Mara</i><i style="background:#ddd;padding:1px 6px;border-radius:8px">Ep 04</i><i style="background:#ddd;padding:1px 6px;border-radius:8px">Sc 12</i></span><span>Grid | List</span></div>
+<div style="flex:1;display:flex"><div style="width:130px;border-right:1px solid #bbb;padding:12px;display:flex;flex-direction:column;gap:8px"><b>Filters</b><span>☐ Character Sheet</span><span>☐ Keyframe</span><span>☐ Voice-over</span><span>Location ▾</span><span>Props ▾</span><span>Scene no. ▾</span></div>
+<div style="flex:1;padding:12px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;align-content:start"><div><div style="height:70px;background:#ddd;position:relative"><span style="position:absolute;top:4px;left:4px">☑</span></div>Mara · Sheet · v3</div><div><div style="height:70px;background:#ddd"></div>Ep04 S12 · Keyframe</div><div><div style="height:70px;background:#ddd"></div>Ep04 S12 · Storyboard</div><div><div style="height:70px;background:#ddd"></div>Mara · VO · S12</div><div><div style="height:70px;background:#ddd"></div>Harbor · Location</div><div><div style="height:70px;background:#ddd"></div>Script · Ep04</div></div></div>
+<div style="background:#222;color:#fff;padding:8px 14px;display:flex;justify-content:space-between"><span>1 selected</span><span>Download ↓ · ZIP</span></div></div></div>
+
+<div style="display:flex;flex-direction:column;gap:8px"><b>3. Project browser</b>
+<div style="background:#fff;border:1.5px solid #222;border-radius:6px;overflow:hidden;height:380px;display:flex;font-size:12px">
+<div style="width:190px;border-right:1px solid #bbb;padding:12px;display:flex;flex-direction:column;gap:6px"><b>Projects</b><span>▾ Series Alpha</span><span style="padding-left:12px">▾ Season 1</span><span style="padding-left:24px">▸ Ep 01</span><span style="padding-left:24px;font-weight:700">▾ Ep 04 (42)</span><span style="padding-left:36px">Scene 11 (6)</span><span style="padding-left:36px;font-weight:700;background:#eee">Scene 12 (9)</span><span style="padding-left:36px">Scene 13 (5)</span><span>▸ Series Beta</span></div>
+<div style="flex:1;padding:14px;display:flex;flex-direction:column;gap:10px"><div style="color:#666">Series Alpha / S1 / Ep 04 / Scene 12</div><div style="display:flex;gap:6px"><span style="background:#222;color:#fff;padding:4px 10px;border-radius:12px">All 9</span><span style="border:1px solid #222;padding:4px 10px;border-radius:12px">Keyframes</span><span style="border:1px solid #222;padding:4px 10px;border-radius:12px">Storyboards</span><span style="border:1px solid #222;padding:4px 10px;border-radius:12px">Voice-overs</span></div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"><div style="height:80px;background:#ddd"></div><div style="height:80px;background:#ddd"></div><div style="height:80px;background:#ddd"></div><div style="height:80px;background:#ddd"></div><div style="height:80px;background:#ddd"></div><div style="height:80px;background:#ddd"></div></div></div></div></div>
+
+<div style="display:flex;flex-direction:column;gap:8px"><b>4. Asset detail</b>
+<div style="background:#fff;border:1.5px solid #222;border-radius:6px;overflow:hidden;height:380px;display:flex;font-size:12px">
+<div style="flex:1.4;padding:14px;display:flex;flex-direction:column;gap:8px"><div style="color:#666">← Results</div><div style="flex:1;background:#ddd;display:flex;align-items:center;justify-content:center;color:#666">Preview (image / video / audio / PDF)</div><div style="display:flex;gap:8px"><span style="background:#222;color:#fff;padding:8px 14px;border-radius:4px">Download latest (v3)</span><span style="border:1.5px solid #222;padding:8px 14px;border-radius:4px">Copy link</span></div></div>
+<div style="flex:1;border-left:1px solid #bbb;padding:14px;display:flex;flex-direction:column;gap:8px"><b style="font-size:14px">Mara – Character Sheet</b><span>Series Alpha · S1 · Ep 04 · Scene 12</span><span>Tags: Mara · Harbor · Lantern</span><span>Size 14 MB · PNG · uploaded by Admin</span><div style="border:1.5px dashed #888;padding:8px;color:#555">Model: (optional)<br>Prompt: (optional) …</div><b>Versions</b><span>v3 · latest · Oct 20 ↓</span><span>v2 · Oct 12 ↓</span><span>v1 · Oct 03 ↓</span></div></div></div>
+
+<div style="display:flex;flex-direction:column;gap:8px"><b>5. Admin: upload</b>
+<div style="background:#fff;border:1.5px solid #222;border-radius:6px;overflow:hidden;height:380px;padding:14px;display:flex;gap:14px;font-size:12px">
+<div style="flex:1;border:2px dashed #888;display:flex;align-items:center;justify-content:center;color:#666;text-align:center">Drop approved files here<br>or browse</div>
+<div style="flex:1.2;display:flex;flex-direction:column;gap:7px"><b style="font-size:14px">Details</b><span style="border:1px solid #222;padding:6px">Asset type ▾ *</span><span style="border:1px solid #222;padding:6px">Project / Season / Episode ▾ *</span><span style="border:1px solid #222;padding:6px">Scene no. *</span><span style="border:1px solid #222;padding:6px">Characters (tags) *</span><span style="border:1px solid #222;padding:6px">Location *</span><span style="border:1px solid #222;padding:6px">Props (tags)</span><span style="border:1.5px dashed #888;padding:6px">AI model (optional)</span><span style="border:1.5px dashed #888;padding:14px 6px">Prompt text (optional)</span><div style="display:flex;gap:8px;margin-top:auto"><span style="background:#222;color:#fff;padding:8px 14px;border-radius:4px">Publish</span><span style="border:1.5px solid #222;padding:8px 14px;border-radius:4px">Cancel</span></div></div></div></div>
+
+<div style="display:flex;flex-direction:column;gap:8px"><b>6. Admin: manage assets and versions</b>
+<div style="background:#fff;border:1.5px solid #222;border-radius:6px;overflow:hidden;height:380px;padding:14px;display:flex;flex-direction:column;gap:10px;font-size:12px">
+<div style="display:flex;justify-content:space-between"><span style="border:1px solid #222;border-radius:12px;padding:5px 14px">Search assets…</span><span style="background:#222;color:#fff;padding:6px 14px;border-radius:4px">+ Upload</span></div>
+<div style="display:grid;grid-template-columns:2fr 1fr 1fr .6fr 1fr;gap:6px;font-weight:700;border-bottom:1px solid #222;padding-bottom:6px"><span>Asset</span><span>Type</span><span>Scene</span><span>Ver.</span><span>Actions</span></div>
+<div style="display:grid;grid-template-columns:2fr 1fr 1fr .6fr 1fr;gap:6px"><span>Mara – Sheet</span><span>Character</span><span>Ep04 S12</span><span>v3</span><span>Edit · +Version</span></div>
+<div style="display:grid;grid-template-columns:2fr 1fr 1fr .6fr 1fr;gap:6px"><span>Harbor – Night</span><span>Location</span><span>Ep04 S11</span><span>v1</span><span>Edit · +Version</span></div>
+<div style="display:grid;grid-template-columns:2fr 1fr 1fr .6fr 1fr;gap:6px"><span>Ep04 Script</span><span>Script</span><span>Ep04</span><span>v5</span><span>Edit · +Version</span></div>
+<div style="margin-top:auto;border:1.5px dashed #888;padding:10px;color:#555">Admins: 3 of 3 seats · names listed here, Remove / Replace</div></div></div>
+</div>
+<section style="background:#fff;border:1.5px solid #222;border-radius:6px;padding:18px;display:flex;flex-direction:column;gap:10px;font-size:14px;line-height:1.55"><h2 style="margin:0;font-size:20px">Search protocol (proposed)</h2>
+<div><b>Format:</b> comma-separated terms, any order. Example: <code>Arjun, ep01, sc03</code></div>
+<div><b>Recognized patterns:</b> <code>ep01</code>, <code>ep1</code>, <code>episode 1</code> → episode · <code>sc03</code>, <code>s3</code>, <code>scene 3</code> → scene · <code>s2</code> style season only with <code>S2E01</code> · anything else → matched against character, location, props, project name.</div>
+<div><b>Logic:</b> terms combine with AND (narrows results). Ranges: <code>sc03-05</code>. Exclude: <code>-props</code> not included in v1.</div>
+<div><b>Feedback:</b> each term turns into a chip showing how it was read; click a chip to change its field (e.g. Arjun as character vs. location) or remove it. Unrecognized terms show as "text match".</div>
+<div><b>Autocomplete:</b> typing suggests known characters, locations and props; typing "ep" or "sc" suggests existing numbers for the chosen project.</div>
+<div style="color:#666"><b>Open:</b> if "Arjun" is both a character and a location name, show both groups ("Characters 12 · Locations 2")?</div></section>
+<div style="padding:16px;background:#222;color:#fff;border-radius:6px;font-size:14px">Reply "confirmed" to move to hi-fi, or send changes to any screen.</div>
+</div>
+
+</x-dc>
+</body>
+</html>

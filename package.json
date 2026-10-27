@@ -1,0 +1,43 @@
+{
+  "name": "asset-hub",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "engines": {
+    "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "test:frontend": "vitest run",
+    "test:frontend:watch": "vitest",
+    "test:browser": "playwright test",
+    "test:browser:install": "playwright install chromium",
+    "quality:tracer": "npm run build && npm run test:browser",
+    "test:tooling": "node --test tests/tooling/*.test.mjs scripts/*.test.mjs",
+    "test:traceability": "node scripts/validate-requirement-evidence.mjs docs/quality/requirement-evidence.md",
+    "quality": "node scripts/run-quality.mjs"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "vite": "latest"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
+    "@eslint/js": "latest",
+    "@playwright/test": "1.64.1",
+    "@testing-library/dom": "10.4.2",
+    "@testing-library/jest-dom": "7.0.1",
+    "@testing-library/react": "16.3.3",
+    "eslint": "latest",
+    "eslint-plugin-react-hooks": "latest",
+    "eslint-plugin-react-refresh": "latest",
+    "globals": "latest",
+    "jsdom": "30.1.3",
+    "vitest": "5.0.5"
+  }
+}
