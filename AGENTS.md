@@ -51,6 +51,7 @@ Never write the prototype admin password value into any file; refer to it only a
 
 ## Project Rules
 
+- Read CHECKPOINT.md before changing any page or adding backend work, and keep it updated in the same commit.
 - Make one change per request and touch only what the request asks for.
 - Explain work in plain English.
 - After every working step, commit it and update `docs/PROGRESS.md` and `HANDOFF.md`.

@@ -1,5 +1,11 @@
 # Asset Hub Progress
 
+## Current checkpoint — C.1, 2026-10-28
+
+LAST COMPLETED: C.1 — created `CHECKPOINT.md`, the page-by-page frontend/backend map for application commit `71a6405`, with 12 views/components, source evidence, requirement/phase links, proposed APIs/records, required states, server rules and known gaps. AGENTS now requires reading/updating it with affected page/backend changes. Current prototype behaviour is distinguished from proposed backend contracts; older role/schema/planning inconsistencies are called out for R.0/R.1.
+
+NEXT STEP: finish R.0, then push. Existing `.gitignore` edits and staged `dist/` untracking remain outside this documentation commit. This is documentation-only; no application changes or test reruns were required. Lint/Vitest status remains unverified as recorded below.
+
 ## Review & Approval frontend prototype — 2026-10-28
 
 The owner requested implementing the supplied review design as an in-memory frontend prototype before backend work. The new screens cover three role modes, super-admin review queues (Waiting, Not approved, Approved, Recent edits), side-by-side version comparison, required rejection notes, chronological append-only review threads and replies, corrected upload rounds, and per-role in-app notifications with unread counts and Mark all as read. Super-admin uploads record automatic approval in the thread. Admin edits appear immediately and feed Recent edits. Member UI retains the last approved version, excludes rejected versions, and hides rejected new assets. This is a browser demonstration, not server-enforced visibility or real authentication; all review state resets on refresh.

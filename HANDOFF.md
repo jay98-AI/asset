@@ -1,5 +1,15 @@
 # HANDOFF — 2026-10-28 IST
 
+LAST COMPLETED: C.1 — Codex created `CHECKPOINT.md` covering 12 pages/views, their verified prototype behaviour, data, proposed APIs/database records, authorization and visibility rules, states, requirement IDs and backend phase mapping, based on application commit `71a6405`. AGENTS now requires reading and maintaining the checkpoint.
+
+NEXT STEP: finish R.0, then push.
+
+CURRENT BASELINE STATUS: `.gitignore` is modified and three `dist/` files remain staged for removal from tracking; these belong to R.0 and are excluded from the C.1 commit. C.1 changes only CHECKPOINT.md, AGENTS.md, docs/PROGRESS.md and HANDOFF.md. No application code, tests, settings, ignores or build output changed. The notes below describe the prior prototype work; later LAST COMPLETED/NEXT STEP blocks below are historical.
+
+OPEN ITEMS FOR HANDOVER: lint/Vitest verification still incomplete; slow CSS processing observed but font-loading cause unconfirmed; Node remains v24.15.0; Phase 6 plans and the in-repository review design reference are absent. CHECKPOINT.md explicitly marks proposed routes/schema and unresolved role/document/phase details so future agents must not assume they are implemented or approved API contracts.
+
+---
+
 CURRENT UPDATE — Codex: the owner explicitly chose to build the Review & Approval screens as a frontend prototype now. Added Member/Admin/Super role modes, review queue tabs, version comparison, required rejection notes, append-only review rounds and replies, notification unread/read actions, correction uploads, automatic approval for super-admin uploads, immediate metadata edits and a Recent edits feed. The supplied handoff-review HTML and screenshots were used as design references. Existing Arjun version numbering is preserved (latest V4 rather than the reference V3).
 
 VERIFICATION: six direct review-rule assertions and syntax checks of 12 edited application/test files passed. All 21 distinct browser checks passed across runs: initial run 19/21, accessibility passed on retry, and both admin journey tests passed after updating the publish-toast expectation. The four new review browser tests passed twice, including 1440px/1280px screenshots with no horizontal overflow, required rejection notes and Escape/focus restoration, corrections, replies, notification delivery between role modes, member holdback and automatic approval. Screenshots were visually reviewed. Full lint initially failed while Playwright recreated test-results during its scan; its retry excluding generated folders stalled. Vitest initially ran 48 passing tests but reported four missing-jsdom annotation failures and four worker startup timeouts; the annotation was fixed, but subsequent one-worker retries stalled without a completion result and were stopped. Lint and Vitest are not green and remain follow-up checks. No production build was run in this feature step.
