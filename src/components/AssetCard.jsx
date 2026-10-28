@@ -1,6 +1,7 @@
 import AudioPlayer from './AudioPlayer.jsx'
 import { TYPE_HUES } from '../data/assets.js'
 import { formatClock, sceneLabel, voiceoverSeconds } from '../lib/assets.js'
+import { StatusBadge } from './ReviewUI.jsx'
 
 export default function AssetCard({ asset, selected = false, onOpen, onSelect, showSelect = true }) {
   const hue = TYPE_HUES[asset.type]
@@ -50,6 +51,7 @@ export default function AssetCard({ asset, selected = false, onOpen, onSelect, s
         <span className="asset-meta">
           {sceneLabel(asset)}{asset.also?.length ? ` +${asset.also.length} more` : ''} · v{asset.ver}
         </span>
+        {asset.reviewStatus && <StatusBadge status={asset.reviewStatus} />}
       </div>
     </article>
   )

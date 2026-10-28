@@ -115,39 +115,40 @@ describe('member browse', () => {
 })
 
 describe('member detail', () => {
-  const openAsset = () => {
+  const openAsset = (name = 'Arjun – Character Sheet') => {
     setup()
-    fireEvent.click(screen.getByRole('button', { name: 'Open Arjun – Character Sheet' }))
+    fireEvent.click(screen.getByRole('button', { name: `Open ${name}` }))
   }
 
   it('shows the asset, its latest version, and every scene it is used in', () => {
     openAsset()
 
     expect(screen.getByRole('heading', { level: 1, name: 'Arjun – Character Sheet' })).toBeInTheDocument()
-    expect(screen.getByText('V4 · latest')).toBeInTheDocument()
+    expect(screen.getByText('V1 · latest')).toBeInTheDocument()
     expect(screen.getByText('Ep 1 · Sc 3')).toBeInTheDocument()
     expect(screen.getByText('Ep 2 · Sc 1')).toBeInTheDocument()
     expect(screen.getByText('Ep 2 · Sc 4')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /Download V4/ })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Download V1/ })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'V2' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'V4' })).not.toBeInTheDocument()
   })
 
   it('switches to an older version and marks it as not latest', () => {
-    openAsset()
+    openAsset('Meera – Character Sheet')
 
-    fireEvent.click(screen.getByRole('button', { name: 'V2' }))
+    fireEvent.click(screen.getByRole('button', { name: 'V1' }))
 
-    expect(screen.getByText('V2', { selector: '.version-badge' })).toBeInTheDocument()
-    expect(screen.queryByText('V2 · latest')).not.toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /Download V2/ })).toBeInTheDocument()
+    expect(screen.getByText('V1', { selector: '.version-badge' })).toBeInTheDocument()
+    expect(screen.queryByText('V1 · latest')).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Download V1/ })).toBeInTheDocument()
   })
 
   it('simulates the download of the shown version', () => {
     openAsset()
 
-    fireEvent.click(screen.getByRole('button', { name: 'V3' }))
-    fireEvent.click(screen.getByRole('button', { name: /Download V3/ }))
+    fireEvent.click(screen.getByRole('button', { name: /Download V1/ }))
 
-    expect(screen.getByRole('status')).toHaveTextContent('Downloading Arjun – Character Sheet v3')
+    expect(screen.getByRole('status')).toHaveTextContent('Downloading Arjun – Character Sheet v1')
   })
 
   it('returns to the library from the back button', () => {

@@ -63,12 +63,12 @@ for (const [label, viewport] of Object.entries(viewports)) {
 
     test('member detail switches versions', async ({ page }) => {
       await page.goto('/')
-      await page.getByRole('button', { name: 'Open Arjun – Character Sheet' }).click()
-      await expect(page.getByRole('heading', { level: 1, name: 'Arjun – Character Sheet' })).toBeVisible()
+      await page.getByRole('button', { name: 'Open Meera – Character Sheet' }).click()
+      await expect(page.getByRole('heading', { level: 1, name: 'Meera – Character Sheet' })).toBeVisible()
       await expectNoHorizontalOverflow(page)
 
-      await page.getByRole('button', { name: 'V2' }).click()
-      await expect(page.locator('.version-badge')).toHaveText('V2')
+      await page.getByRole('button', { name: 'V1' }).click()
+      await expect(page.locator('.version-badge')).toHaveText('V1')
       await expectNoHorizontalOverflow(page)
     })
 

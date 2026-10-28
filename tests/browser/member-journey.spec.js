@@ -19,15 +19,15 @@ test('member discovers, inspects, selects, and downloads', async ({ page }) => {
   // Inspection: open the asset, check its metadata, switch versions.
   await page.getByRole('button', { name: 'Open Arjun – Character Sheet' }).click()
   await expect(page.getByRole('heading', { level: 1, name: 'Arjun – Character Sheet' })).toBeVisible()
-  await expect(page.getByText('V4 · latest')).toBeVisible()
+  await expect(page.getByText('V1 · latest')).toBeVisible()
   await expect(page.getByText('Ep 2 · Sc 4')).toBeVisible()
 
-  await page.getByRole('button', { name: 'V2' }).click()
-  await expect(page.locator('.version-badge')).toHaveText('V2')
+  await expect(page.getByRole('button', { name: 'V2', exact: true })).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'V4', exact: true })).toHaveCount(0)
 
   // Simulated download of the shown version.
-  await page.getByRole('button', { name: /Download V2/ }).click()
-  await expect(page.getByRole('status')).toHaveText('Downloading Arjun – Character Sheet v2')
+  await page.getByRole('button', { name: /Download V1/ }).click()
+  await expect(page.getByRole('status')).toHaveText('Downloading Arjun – Character Sheet v1')
 
   // Bulk selection and the ZIP simulation.
   await page.getByRole('button', { name: '← Back to library' }).click()

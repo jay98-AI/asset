@@ -37,7 +37,7 @@ test('prototype admin publishes, links, versions, and deletes', async ({ page })
   await page.getByLabel(/Scenes/).fill('ep03 sc09')
   await page.getByRole('button', { name: /Publish asset/ }).click()
 
-  await expect(page.getByRole('status')).toHaveText('Asset published')
+  await expect(page.getByRole('status')).toHaveText('Asset published · waiting for review')
   await expect(page.getByRole('button', { name: /Journey Asset/ })).toBeVisible()
 
   // Link the new asset to a second scene.

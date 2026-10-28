@@ -1,4 +1,9 @@
+import { StatusBadge } from './ReviewUI.jsx'
+import { useRef, useState } from 'react'
+
 export default function AdminView({ form, projects, types, assets, onField, onPublish, onOpen }) {
+  const [fileName, setFileName] = useState('')
+  const fileInput = useRef(null)
   const input = (field, placeholder, props = {}) => (
     <input value={form[field]} onChange={(event) => onField(field, event.target.value)} placeholder={placeholder} {...props} />
   )
@@ -17,11 +22,12 @@ export default function AdminView({ form, projects, types, assets, onField, onPu
       <div className="admin-layout">
         <section className="upload-card">
           <div className="section-heading"><div><span>01</span><h2>Upload asset</h2></div><small>Fields marked * are required</small></div>
-          <div className="drop-zone is-pending">
+          <input ref={fileInput} type="file" className="sr-only" aria-label="Upload source file" accept="image/*,.pdf,audio/*" onChange={(event) => setFileName(event.target.files?.[0]?.name ?? '')} />
+          <button type="button" className={`drop-zone ${fileName ? 'has-file' : 'is-pending'}`} onClick={() => fileInput.current.click()} onDragOver={(event) => event.preventDefault()} onDrop={(event) => { event.preventDefault(); setFileName(event.dataTransfer.files[0]?.name ?? '') }}>
             <span className="upload-icon" aria-hidden="true">↑</span>
-            <strong>Drop file here or browse</strong>
+            <strong>{fileName || 'Drop file here or browse'}</strong>
             <small>Choose the file before publishing its metadata</small>
-          </div>
+          </button>
 
           <div className="form-grid">
             <label><span>Project *</span><select value={form.project} onChange={(event) => onField('project', event.target.value)}><option value="">Select project…</option>{projects.map((project) => <option key={project}>{project}</option>)}<option value="__new">+ Add new project</option></select></label>
@@ -37,7 +43,7 @@ export default function AdminView({ form, projects, types, assets, onField, onPu
             <label><span>AI model</span>{input('model', 'Optional')}</label>
             <label className="full"><span>Prompt</span><textarea value={form.prompt} onChange={(event) => onField('prompt', event.target.value)} placeholder="Optional generation prompt" /></label>
           </div>
-          <button className="primary-button publish-button" onClick={onPublish}>Publish asset <span>→</span></button>
+          <button className="primary-button publish-button" onClick={() => { if (onPublish(fileName)) { setFileName(''); fileInput.current.value = '' } }}>Publish asset <span>→</span></button>
         </section>
 
         <section className="manage-card">
@@ -47,7 +53,7 @@ export default function AdminView({ form, projects, types, assets, onField, onPu
             {assets.map((asset) => (
               <button key={asset.id} onClick={() => onOpen(asset.id)}>
                 <span className="manage-monogram">{asset.type.slice(0, 1)}</span>
-                <span className="manage-details"><strong>{asset.name}</strong><small>{asset.type} · Ep {asset.ep}{asset.sc ? ` / Sc ${asset.sc}` : ''}</small></span>
+                <span className="manage-details"><strong>{asset.name}</strong><small>{asset.type} · Ep {asset.ep}{asset.sc ? ` / Sc ${asset.sc}` : ''}</small>{asset.reviewStatus && <StatusBadge status={asset.reviewStatus} />}</span>
                 <span className="manage-version">v{asset.ver}</span>
                 <span className="manage-arrow">→</span>
               </button>

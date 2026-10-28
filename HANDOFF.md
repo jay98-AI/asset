@@ -1,4 +1,16 @@
-# HANDOFF — 2026-10-27 IST
+# HANDOFF — 2026-10-28 IST
+
+CURRENT UPDATE — Codex: the owner explicitly chose to build the Review & Approval screens as a frontend prototype now. Added Member/Admin/Super role modes, review queue tabs, version comparison, required rejection notes, append-only review rounds and replies, notification unread/read actions, correction uploads, automatic approval for super-admin uploads, immediate metadata edits and a Recent edits feed. The supplied handoff-review HTML and screenshots were used as design references. Existing Arjun version numbering is preserved (latest V4 rather than the reference V3).
+
+VERIFICATION: six direct review-rule assertions and syntax checks of 12 edited application/test files passed. All 21 distinct browser checks passed across runs: initial run 19/21, accessibility passed on retry, and both admin journey tests passed after updating the publish-toast expectation. The four new review browser tests passed twice, including 1440px/1280px screenshots with no horizontal overflow, required rejection notes and Escape/focus restoration, corrections, replies, notification delivery between role modes, member holdback and automatic approval. Screenshots were visually reviewed. Full lint initially failed while Playwright recreated test-results during its scan; its retry excluding generated folders stalled. Vitest initially ran 48 passing tests but reported four missing-jsdom annotation failures and four worker startup timeouts; the annotation was fixed, but subsequent one-worker retries stalled without a completion result and were stopped. Lint and Vitest are not green and remain follow-up checks. No production build was run in this feature step.
+
+Refresh resets all prototype changes. There is still no server-side authorization, database, real file persistence or cross-browser notification delivery. The upload page can select/drop a local file name without uploading its bytes; add-version selection remains simulated. Desktop targets are 1440px and 1280px.
+
+NEXT STEP FOR THIS PROTOTYPE: owner reviews the working demo; complete lint and Vitest verification before release. R.0 remains incomplete: its existing .gitignore changes and staged dist untracking are preserved separately and must not be included in a prototype commit. R.1 document/role/schema planning remains pending; the older handoff below is historical context.
+
+OPEN ISSUE: Production build takes ~2 min; vite:css transform 102s. Suspected internet font loading (Google Fonts) in the redesign. Fix before launch; the office app must not depend on the internet. This cause has not been confirmed or investigated in this step.
+
+---
 
 LAST COMPLETED: Collapsible Asset Hub navigation — the redundant Production library labels are removed; the labelled sidebar can fold into a persistent accessible icon rail without changing asset behaviour
 

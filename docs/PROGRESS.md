@@ -1,5 +1,19 @@
 # Asset Hub Progress
 
+## Review & Approval frontend prototype — 2026-10-28
+
+The owner requested implementing the supplied review design as an in-memory frontend prototype before backend work. The new screens cover three role modes, super-admin review queues (Waiting, Not approved, Approved, Recent edits), side-by-side version comparison, required rejection notes, chronological append-only review threads and replies, corrected upload rounds, and per-role in-app notifications with unread counts and Mark all as read. Super-admin uploads record automatic approval in the thread. Admin edits appear immediately and feed Recent edits. Member UI retains the last approved version, excludes rejected versions, and hides rejected new assets. This is a browser demonstration, not server-enforced visibility or real authentication; all review state resets on refresh.
+
+The demo retains the current library's Arjun V4 while adopting the reference's review rounds and approved V1. Desktop layout targets 1440px and 1280px. Six direct review-rule assertions and syntax checks of 12 edited files passed. All 21 distinct browser checks passed across runs; the four new review browser tests passed twice and screenshots at both target widths were visually reviewed. The initial browser run passed 19/21; the accessibility check and admin journey then passed on retries (the admin journey's publish message expectation was updated for review status).
+
+Verification limits: full lint hit a generated test-results folder scan race, and the retry excluding generated folders stalled. The initial Vitest run passed 48 tests but had four missing-browser-environment failures in the new test file and four worker startup timeouts. Its environment annotation was fixed; one-worker retries stalled and were stopped. Lint and Vitest are not reported as passing. No production build was run for this feature. The upload page can select/drop a local filename for the demo; actual file bytes are not stored. Add-version selection remains simulated.
+
+R.0 is still incomplete; its ignore changes and staged dist untracking remain separate. R.1 approved-documents and backend planning updates remain pending. No backend or permanent storage has been added.
+
+Open issue: Production build takes ~2 min; vite:css transform 102s. Suspected internet font loading (Google Fonts) in the redesign. Fix before launch; the office app must not depend on the internet. The font-loading cause is unconfirmed.
+
+---
+
 **Live tracker:** use this file for the current delivery status. From 2026-10-26, GSD drives planning; `.planning/` is live.
 
 | Director stage | Status | Notes |

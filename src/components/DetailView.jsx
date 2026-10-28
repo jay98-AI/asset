@@ -1,6 +1,7 @@
 import AudioPlayer from './AudioPlayer.jsx'
 import { TYPE_HUES } from '../data/assets.js'
 import { assetSpecs, sceneLabel, usesFor } from '../lib/assets.js'
+import { StatusBadge } from './ReviewUI.jsx'
 
 export default function DetailView({
   asset,
@@ -18,6 +19,10 @@ export default function DetailView({
   onLink,
   onRemoveUse,
   onDelete,
+  onCancelDelete,
+  reviewStatus,
+  reviewThread,
+  onEdit,
 }) {
   const hue = TYPE_HUES[asset.type]
   const tags = [...asset.chars, asset.loc, ...asset.props].filter(Boolean)
@@ -45,7 +50,7 @@ export default function DetailView({
             )}
           </div>
           <div className="version-thumbnails">
-            {Array.from({ length: asset.ver }, (_, index) => index + 1).map((version) => (
+            {(asset.availableVersions ?? Array.from({ length: asset.ver }, (_, index) => index + 1)).map((version) => (
               <button
                 key={version}
                 className={shownVersion === version ? 'is-active' : ''}
@@ -62,6 +67,7 @@ export default function DetailView({
           <div className="detail-type">{asset.type}</div>
           <h1>{asset.name}</h1>
           <p className="detail-location">{sceneLabel(asset)} · {asset.project} · Season 1</p>
+          {reviewStatus && <StatusBadge status={reviewStatus} />}
           <div className="tag-list">{tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
           <div className="used-in">
             <span>Used in</span>
@@ -90,7 +96,9 @@ export default function DetailView({
                 <button className="secondary-button" onClick={onAddVersion}>+ Add version</button>
                 <button className="outline-accent-button" onClick={onLink}>Link to scene</button>
                 <button className="danger-button" onClick={onDelete}>{deletePending ? 'Confirm delete?' : 'Delete'}</button>
+                {deletePending && <button className="secondary-button" onClick={onCancelDelete}>Cancel delete</button>}
               </div>
+              <details className="metadata-edit"><summary>Edit name and tags</summary><form onSubmit={(event) => { event.preventDefault(); const data = new FormData(event.currentTarget); onEdit(data.get('assetName').trim(), data.get('tags')) }}><label>Asset name<input name="assetName" defaultValue={asset.name} required /></label><label>Search tags<input name="tags" defaultValue={asset.chars.join(', ')} /></label><button className="secondary-button">Save changes</button></form></details>
             </div>
           )}
 
@@ -104,10 +112,11 @@ export default function DetailView({
 
           <div className="property-heading"><h2>Properties</h2><span>Asset metadata</span></div>
           <div className="property-grid">
-            {assetSpecs(asset).map(([key, value]) => (
+            {assetSpecs({ ...asset, ver: shownVersion }).map(([key, value]) => (
               <div key={key}><span>{key}</span><strong>{value}</strong></div>
             ))}
           </div>
+          {reviewThread}
         </section>
       </div>
     </main>

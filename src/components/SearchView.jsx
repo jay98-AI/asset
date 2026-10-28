@@ -1,6 +1,7 @@
 import AssetCard from './AssetCard.jsx'
 import { FilterDropdown, TypeFilters } from './Filters.jsx'
 import { sceneLabel } from '../lib/assets.js'
+import { StatusBadge } from './ReviewUI.jsx'
 
 export default function SearchView({
   query,
@@ -113,7 +114,7 @@ export default function SearchView({
                 <button className="select-button" onClick={() => onSelect(asset.id)} aria-pressed={selected.includes(asset.id)} aria-label={`${selected.includes(asset.id) ? 'Unselect' : 'Select'} ${asset.name}`}>
                   {selected.includes(asset.id) ? '✓' : ''}
                 </button>
-                <button className="asset-list-name" onClick={() => onOpen(asset.id)}>{asset.name}</button>
+                <button className="asset-list-name" onClick={() => onOpen(asset.id)}>{asset.name}{asset.reviewStatus && <StatusBadge status={asset.reviewStatus} />}</button>
                 <span>{asset.type}</span>
                 <span>{sceneLabel(asset)}</span>
                 <span className="num">V{asset.ver}</span>
